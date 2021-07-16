@@ -1,0 +1,56 @@
+{
+  "name": "d3-chart-sandbox",
+  "version": "1.0.0",
+  "description": "A test webapp with d3.js and crossfilter.js libraries",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm-run-all dev:server dev:client",
+    "dev:client": "webpack serve --config client/webpack.config.js",
+    "dev:server": "webpack --config server/webpack.config.js && node dist/server.js",
+    "build": "npm-run-all build:server build:client",
+    "build:client": "cross-env NODE_ENV=production webpack --config client/webpack.config.js",
+    "build:server": "cross-env NODE_ENV=production webpack --config server/webpack.config.js",
+    "prod": "node dist/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simpleman383/d3-chart-sandbox.git"
+  },
+  "author": "Alexey Kurnev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/simpleman383/d3-chart-sandbox/issues"
+  },
+  "homepage": "https://github.com/simpleman383/d3-chart-sandbox#readme",
+  "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@babel/plugin-transform-runtime": "^7.14.5",
+    "@babel/preset-env": "^7.14.7",
+    "@babel/preset-react": "^7.14.5",
+    "autoprefixer": "^10.3.1",
+    "babel-loader": "^8.2.2",
+    "copy-webpack-plugin": "^9.0.1",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.0.0",
+    "html-webpack-plugin": "^5.3.2",
+    "mini-css-extract-plugin": "^2.1.0",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.3.5",
+    "postcss-loader": "^6.1.1",
+    "sass": "^1.35.2",
+    "sass-loader": "^12.1.0",
+    "style-loader": "^3.1.0",
+    "webpack": "^5.44.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-validator": "^6.12.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "readline": "^1.3.0"
+  }
+}
