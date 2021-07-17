@@ -26,7 +26,11 @@ const webpackClientConfiguration = {
   },
 
   resolve: {
-    alias: {}
+    alias: {
+      state: path.resolve(paths.srcDir, "state"),
+      views: path.resolve(paths.srcDir, "views"),
+      utils: path.resolve(paths.srcDir, "utils")
+    }
   },
 
   module: {
@@ -37,7 +41,8 @@ const webpackClientConfiguration = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: [ "@babel/preset-env", "@babel/preset-react" ]
+            presets: [ "@babel/preset-env", "@babel/preset-react" ],
+            plugins: [ "@babel/transform-runtime" ]
           }
         }
       },
