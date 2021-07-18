@@ -22,13 +22,6 @@ export default (state = defaultState, action) => {
       };
     }
 
-    case filterActions.FILTER_CHANGE: {
-      return {
-        ...state,
-        filter: defaultState.filter
-      };
-    }
-    
     case dataActions.DATASET_TYPE_CHANGE: {
       return {
         ...state,

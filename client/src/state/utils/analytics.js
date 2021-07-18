@@ -35,7 +35,17 @@ const reduceAsync = (array, reduceFn, initialAccumulatorState, chunkSize = 1000)
 };
 
 
-export const normalizeDataset = async (dataset) => {
+export const normalizeDataset = async dataset => {
+  if (!Array.isArray(dataset) || !Boolean(dataset)) {
+    return Promise.resolve(null);
+  }
+  else {
+    return Promise.resolve(dataset);
+  }
+}
+
+
+/* export const normalizeDataset = async (dataset) => {
   if (!Array.isArray(dataset) || !Boolean(dataset)) {
     return Promise.resolve(null);
   }
@@ -54,4 +64,4 @@ export const normalizeDataset = async (dataset) => {
       types: Array.from(types) 
     };
   }
-};
+}; */

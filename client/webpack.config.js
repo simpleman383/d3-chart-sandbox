@@ -29,7 +29,9 @@ const webpackClientConfiguration = {
     alias: {
       state: path.resolve(paths.srcDir, "state"),
       views: path.resolve(paths.srcDir, "views"),
-      utils: path.resolve(paths.srcDir, "utils")
+      utils: path.resolve(paths.srcDir, "utils"),
+
+      fonts: path.resolve(paths.staticDir, "fonts"),
     }
   },
 

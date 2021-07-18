@@ -1,0 +1,1 @@
+export { AbsoluteSizingPanel as default } from "./View";

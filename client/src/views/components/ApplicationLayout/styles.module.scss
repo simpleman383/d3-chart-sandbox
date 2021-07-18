@@ -1,0 +1,34 @@
+@import "views/styles/breakpoints.scss";
+
+.root {
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+
+  width: inherit;
+  height: inherit;
+
+
+  &__main {
+    box-sizing: border-box;
+    display: block;
+    position: relative;
+
+    width: auto;
+    height: inherit;
+
+    padding: 16px;
+
+    @include tablet-portrait-up {
+      padding: 16px 24px;
+    }
+
+    @include tablet-landscape-up {
+      padding: 20px 28px;
+    }
+
+    @include laptop-up {
+      padding: 24px 32px;
+    }
+  }
+}

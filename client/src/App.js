@@ -1,17 +1,13 @@
 import React from "react";
 import { connect, Provider } from "react-redux";
 import { store } from "state/store";
-
 import { onApplicationExit, onApplicationLoad } from "state/actions/core/lifecycle";
-import { DatasetType } from "state/types/analytics";
-import { selectDatasetType } from "state/actions/analytics/data";
+
+import { ApplicationLayout } from "views/components";
+import "views/styles/main.scss";
 
 
-const mapStateToProps = state => ({
-  data: state.analytics.data
-});
-
-const Main = connect(mapStateToProps)(({ data, dispatch }) => {
+const Main = connect()(({ dispatch }) => {
 
   React.useEffect(() => {
     dispatch(onApplicationLoad());
@@ -21,29 +17,7 @@ const Main = connect(mapStateToProps)(({ data, dispatch }) => {
     };
   }, []);
 
-
-  const onUpdateClick = (datasetType) => {
-    switch (datasetType) {
-      case DatasetType.Static:
-      case DatasetType.Random:
-        dispatch(selectDatasetType(datasetType));
-        break;
-      default:
-        break;
-    }
-  };
-
-  return (
-    <main>
-      <div>
-        <button onClick={() => onUpdateClick(DatasetType.Static)}>Update with static</button>
-        <button onClick={() => onUpdateClick(DatasetType.Random)}>Update with random</button>
-      </div>
-      <div>
-        {JSON.stringify(data)}
-      </div>
-    </main>
-  );
+  return <ApplicationLayout />;
 });
 
 

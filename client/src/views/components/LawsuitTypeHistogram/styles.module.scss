@@ -1,0 +1,14 @@
+.root {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+}
+
+.bar {
+  cursor: pointer;
+  transition: all .2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}

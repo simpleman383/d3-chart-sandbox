@@ -1,0 +1,77 @@
+@import "views/styles/breakpoints.scss";
+
+
+.root {
+  box-sizing: border-box;
+  display: block;
+  width: inherit;
+  height: inherit;
+
+  &__container {
+    box-sizing: border-box;
+    width: inherit;
+    height: inherit;
+
+    display: flex;
+    flex-direction: column;
+
+    @include laptop-up {
+      flex-direction: row;
+    }
+  }
+
+  &__column {
+    position: relative;
+    box-sizing: border-box;
+    display: block;
+
+
+    @include laptop-up {
+      height: inherit;
+    }
+
+    &_main {
+      flex: 1 0;
+    }
+
+    &_aside {
+      flex: 0 0 270px;
+      margin: 24px 0 0 0;
+
+      @include tablet-portrait-up {
+        margin: 32px 0 0 0;
+        flex: 0 0 320px;
+      }
+
+      @include laptop-up {
+        margin: 0 0 0 32px;
+        flex: 0 0 360px;
+      }
+
+      @include desktop-up {
+        flex: 0 0 400px;
+      }
+    }
+  }
+
+
+  &__panel {
+    position: relative;
+
+    &_main {
+      width: 100%;
+      height: 100%;
+    }
+
+    &_aside {
+      width: 100%;
+      height: 100%;
+
+      @include laptop-up {
+        height: 50%;
+      }
+    }
+  }
+
+
+}

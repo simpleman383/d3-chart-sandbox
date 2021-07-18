@@ -1,0 +1,1 @@
+export { ApplicationLayout as default } from "./View";

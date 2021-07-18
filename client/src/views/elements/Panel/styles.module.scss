@@ -1,0 +1,8 @@
+@import "views/styles/colors.scss";
+
+.root {
+  box-sizing: border-box;
+
+  background-color: $background-panel;
+  border-radius: 8px;
+}
