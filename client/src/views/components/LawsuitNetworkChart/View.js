@@ -1,7 +1,7 @@
 import React from "react";
 import cls from "classnames";
 import classes from "./styles.module.scss";
-import { D3Graph } from "./Graph";
+import { D3DirectedGraph as D3Graph } from "./Graph";
 
 const NetworkChartView = ({ className, width, height, data, onNodeClick, ...props }) => {
   const containerRef = React.useRef(null);

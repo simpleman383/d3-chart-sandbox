@@ -1,53 +1,255 @@
 import * as d3 from "d3";
 import classes from "./styles.module.scss";
 
-const constrainValue = (value, min, max) => {
-  if (value < min) {
-    return min;
+
+class GraphBuilder {
+
+  setColorScheme(color) {
+    this.color = color;
   }
-  else if (value > max) {
-    return max;
+
+  createSvg(width, height) {
+    const svg = d3.create("svg")
+      .attr("viewBox", [-width/2, -height/2, width, height ])
+      .style("font", "14px Roboto");
+
+    return svg;
   }
-  else {
-    return value;
+
+  createDefs(rootSelection, dataTypes) {
+    const color = this.color || "white";
+
+    const defs = rootSelection.append("defs")
+      .selectAll("marker")
+      .data(dataTypes)
+      .join("marker")
+      .attr("id", d => `arrow-${d}`)
+      .attr("viewBox", "0 -8 16 16")
+      .attr("refX", 24)
+      .attr("refY", 0)
+      .attr("markerWidth", 8)
+      .attr("markerHeight", 8)
+      .attr("orient", "auto")
+      .append("path")
+      .attr("fill", color)
+      .attr("d", "M0,-8L16,0L0,8");
+
+    return defs;
   }
-};
 
-export class D3Graph {
-  constructor(data, size, handlers) {
-    const width = size.width;
-    const height = size.height;
+  createLinks(rootSelection, dataLinks) {
+    const color = this.color || (() => "white"); 
 
-    const { 
-      onNodeClick, 
-    } = handlers || {};
+    const link = rootSelection.append("g")
+      .attr("fill", "none")
+      .attr("stroke-width", 1.5)
+      .selectAll("path")
+      .data(dataLinks)
+      .join("path")
+      .attr("stroke", d => color(d.type))
+      .attr("marker-end", d => `url(${new URL(`#arrow-${d.type}`, location)})`);
 
-    const self = this;
-    this.width = width;
-    this.height = height;
+    return link;
+  }
 
-    this.types = data.types;
-    this.links = data.links.map(d => Object.create(d));
-    this.nodes = data.nodes.map(d => Object.create(d));
+  createNodes(rootSelection, dataNodes, options = {}) {
+    const { strokeColor = "white", strokeWidth = 1, radius = 6, onClick, onMouseOver, onMouseOut } = options;
 
-    const color = d3.scaleOrdinal(this.types, d3.schemeCategory10);
+    const node = rootSelection.append("g")
+      .attr("fill", "currentColor")
+      .attr("stroke-linecap", "round")
+      .attr("stroke-linejoin", "round")
+      .attr("class", classes.node)
+      .selectAll("g")
+      .data(dataNodes)
+      .join("g")
+      .on("click", (event, node) => {
+        const { index } = node;
+        const target = dataNodes[index] || null;
 
-    function linkArc(d) {
-      const sourceX = d.source.x;
-      const sourceY = d.source.y;
+        if (typeof(onClick) === "function") {
+          onClick(target, event, node);
+        }
+      })
+      .on("mouseover", (event, node) => {
+        const { index } = node;
+        const target = dataNodes[index] || null;
 
-      const targetX = d.target.x;
-      const targetY = d.target.y;
+        if (typeof(onMouseOver) === "function") {
+          onMouseOver(target, event, node);
+        }
+      })
+      .on("mouseout", (event, node) => {
+        const { index } = node;
+        const target = dataNodes[index] || null;
 
-      const r = Math.hypot(targetX - sourceX, targetY - sourceY);
+        if (typeof(onMouseOut) === "function") {
+          onMouseOut(target, event, node);
+        }
+      });
 
-      return `
-        M${sourceX},${sourceY}
-        A${r},${r} 0 0,1 ${targetX},${targetY}
-      `;
+    node.append("circle")
+      .attr("stroke", strokeColor)
+      .attr("stroke-width", strokeWidth)
+      .attr("r", radius);
+
+    return node;
+  }
+
+  addNodeTitles(rootSelection, options) {
+    const { marginX, marginY, color, strokeColor } = options;
+
+    return rootSelection.append("text")
+      .attr("x", marginX)
+      .attr("y", marginY)
+      .text(d => d.id)
+      .clone(true).lower()
+      .attr("color", color)
+      .attr("fill", color)
+      .attr("stroke", strokeColor)
+      .attr("stroke-width", 2);
+  }
+
+  setupZoom(options = {}) {
+    const { size, scaleExtent, onZoom } = options;
+
+    const zoom = d3.zoom()                            
+      .scaleExtent([scaleExtent[0], scaleExtent[1]])
+      .translateExtent([[-size.width/2, -size.height/2], [size.width/2, size.height/2]])
+      .extent([[-size.width/2, -size.height/2], [size.width/2, size.height/2]])
+      .on("zoom", onZoom);   
+
+    return zoom;
+  }
+
+  createForceSimulation(forces, dataNodes) {
+    let simulation = d3.forceSimulation(dataNodes);
+
+    for(const force of forces) {
+      const [ forceName, forceEntity ] = force;
+      simulation = simulation.force(forceName, forceEntity);
     }
 
-    const drag = simulation => {
+    return simulation;
+  }
+
+  createLinkArc(d) {
+    const sourceX = d.source.x;
+    const sourceY = d.source.y;
+
+    const targetX = d.target.x;
+    const targetY = d.target.y;
+
+    const r = Math.hypot(targetX - sourceX, targetY - sourceY);
+
+    return `
+      M${sourceX},${sourceY}
+      A${r},${r} 0 0,1 ${targetX},${targetY}
+    `;
+  }
+
+}
+
+
+
+
+export class D3DirectedGraph {
+  constructor(data, size, eventHandlers) {
+    const width = size.width || 0;
+    const height = size.height || 0;
+
+    this.eventHandlers = eventHandlers || {};
+
+    this.size = { width, height };
+    this.data = {
+      types: data.types || [],
+      links: data.links || [],
+      nodes: data.nodes || []
+    };
+
+    this.graph = this.#buildGraph(this.data, this.size);
+  }
+
+
+  #buildGraph(data, size) {
+    const dataTypes = data.types;
+    const dataLinks = data.links.map(d => Object.create(d));
+    const dataNodes = data.nodes.map(d => Object.create(d)); 
+
+    const color = d3.scaleOrdinal(dataTypes, d3.schemeCategory10);
+
+    const builder = new GraphBuilder();
+    builder.setColorScheme(color);
+
+    const svg = builder.createSvg(size.width, size.height);
+    const defs = builder.createDefs(svg, dataTypes);
+
+    const zoom = builder.setupZoom({
+      scaleExtent: [0.25, 2],
+      size: size,
+      onZoom: (event) => {
+        container.attr("transform", event.transform);
+      }
+    });
+
+    svg.call(zoom);
+
+    const container = svg.append("g");
+    const links = builder.createLinks(container, dataLinks);
+
+
+    let nodes = builder.createNodes(container, dataNodes, { 
+      radius: 8,
+      onClick: typeof(this.eventHandlers.onNodeClick) === "function" ? this.eventHandlers.onNodeClick : null,
+      onMouseOver: (target, event, node) => {
+        links.filter(link => {
+          return link.target.index === node.index || link.source.index === node.index;
+        })
+        .attr("stroke-width", "4px")
+        .attr("stroke", "yellow")
+        .attr("marker-end", "");
+
+        if (typeof(this.eventHandlers.onNodeMouseOver) === "function") {
+          this.eventHandlers.onNodeMouseOver(target, event, node);
+        }
+      },
+      onMouseOut: (target, event, node) => {
+        links.filter(link => {
+          return link.target.index === node.index || link.source.index === node.index;
+        })
+        .attr("stroke-width", null)
+        .attr("stroke", d => color(d.type))
+        .attr("marker-end", d => `url(${new URL(`#arrow-${d.type}`, location)})`);
+
+        if (typeof(this.eventHandlers.onNodeMouseOut) === "function") {
+          this.eventHandlers.onNodeMouseOut(target, event, node);
+        }
+      }
+    });
+
+    const titles = builder.addNodeTitles(nodes, {
+      marginX: 12, marginY: 12,
+      color: "white",
+      strokeColor: "black"
+    });
+
+
+    const forceSimulation = builder.createForceSimulation([
+      [ "link", d3.forceLink(dataLinks).id(d => d.id).distance(250) ],
+      [ "charge", d3.forceManyBody() ],
+      [ "collide", d3.forceCollide(80) ],
+      [ "center", d3.forceCenter(0, 0) ],
+    ], dataNodes);
+
+    forceSimulation.on("tick", () => {
+      links.attr("d", builder.createLinkArc);
+
+      nodes.attr("transform", d => {
+        return `translate(${d.x},${d.y})`;
+      });
+    });
+
+    const withDrag = simulation => {
       function dragstarted(event, d) {
         if (!event.active) simulation.alphaTarget(0.3).restart();
         d.fx = d.x;
@@ -71,120 +273,33 @@ export class D3Graph {
         .on("end", dragended);
     }
 
+    nodes = nodes.call(withDrag(forceSimulation));
 
-    this.simulation = d3
-      .forceSimulation(this.nodes)
-      .force("link", 
-        d3.forceLink(this.links)
-          .id(d => d.id)
-          .distance(Math.min(width, height) / Math.sqrt(this.nodes.length))
-      )
-      .force("charge", d3.forceManyBody().strength(-600))
-      .force("x", d3.forceX())
-      .force("y", d3.forceY());
-
-    const svg = d3
-      .create("svg")
-      .attr("viewBox", [-width/2, -height/2, width, height ])
-      .style("font", "14px Roboto");
-
-    const zoom = d3.zoom()                            
-      .scaleExtent([0.25, 2])
-      .translateExtent([[-width/2, -height/2], [width/2, height/2]])
-      .extent([[-width/2, -height/2], [width/2, height/2]])
-      .on("zoom", zoomed);         
-      
-    svg.call(zoom);
-
-    function zoomed(event) {
-      console.log(event.transform);
-      container.attr("transform", event.transform);
-
-    }
-
-
-    svg.append("defs").selectAll("marker")
-      .data(this.types)
-      .join("marker")
-      .attr("id", d => `arrow-${d}`)
-      .attr("viewBox", "0 -8 16 16")
-      .attr("refX", 24)
-      .attr("refY", -4)
-      .attr("markerWidth", 8)
-      .attr("markerHeight", 8)
-      .attr("orient", "auto")
-      .append("path")
-      .attr("fill", color)
-      .attr("d", "M0,-8L16,0L0,8");
-
-    const container = svg.append("g");
-      
-    const link = container.append("g")
-      .attr("fill", "none")
-      .attr("stroke-width", 1.5)
-      .selectAll("path")
-      .data(this.links)
-      .join("path")
-      .attr("stroke", d => color(d.type))
-      .attr("marker-end", d => `url(${new URL(`#arrow-${d.type}`, location)})`);
-
-    const node = container.append("g")
-      .attr("fill", "currentColor")
-      .attr("stroke-linecap", "round")
-      .attr("stroke-linejoin", "round")
-      .attr("class", classes.node)
-      .selectAll("g")
-      .data(this.nodes)
-      .join("g")
-      .call(drag(this.simulation))
-      .on("click", (event, node) => {
-        const { index } = node;
-        const target = data.nodes[index] || null;
-
-        if (typeof(onNodeClick) === "function") {
-          onNodeClick(target, event, node);
-        }
-      });
-
-    node.append("circle")
-      .attr("stroke", "white")
-      .attr("stroke-width", 1)
-      .attr("r", 8);
-
-    node.append("text")
-      .attr("x", 12)
-      .attr("y", 12)
-      .text(d => d.id)
-      .clone(true).lower()
-      .attr("color", "white")
-      .attr("fill", "black")
-      .attr("stroke", "black")
-      .attr("stroke-width", 2);
-
-    this.simulation.on("tick", () => {
-      link.attr("d", linkArc);
-
-      node.attr("transform", d => {
-        return `translate(${d.x},${d.y})`;
-      });
-    });
-    
-    this.svg = svg;
+    return { svg, nodes, links, simulation: forceSimulation };
   }
 
-  resize(size) {
-    this.width = size.width;
-    this.height = size.height;
-    this.svg.attr("viewBox", [-this.width/2, -this.height/2, this.width, this.height ]);
+  #disposeGraph() {
+    if (this.graph !== null) {
+      this.graph.simulation.stop();
+      this.graph.svg.remove();
+    }
   }
 
   appendTo(containerElement) {
-    containerElement.appendChild(this.svg.node());
+    containerElement.appendChild(this.graph.svg.node());
+    return this;
   }
 
   dispose() {
-    this.simulation.stop();
-    this.svg.remove();
+    return this.#disposeGraph();
+  }
+
+
+  updateData(nextData) {
+
+  }
+
+  updateSize(nextSize) {
+
   }
 }
-
