@@ -12,6 +12,13 @@ const defaultState = {
 export default (state = defaultState, action) => {
   switch (action.type) {
 
+    case filterActions.FILTER_RESET: {
+      return {
+        ...state,
+        filter: defaultState.filter
+      };
+    }
+
     case filterActions.FILTER_CHANGE: {
       return {
         ...state,

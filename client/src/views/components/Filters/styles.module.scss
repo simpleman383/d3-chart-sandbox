@@ -1,0 +1,57 @@
+@import "views/styles/colors.scss";
+@import "views/styles/breakpoints.scss";
+
+.root {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+
+  &__section {
+    position: relative;
+    margin-bottom: 24px;
+  }
+}
+
+.section {
+  box-sizing: border-box;
+  display: block;
+
+  width: 100%;
+
+  &__title {
+    position: relative;
+    display: block;
+  }
+
+  &__body {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin-top: 24px;
+  }
+}
+
+
+.message {
+  box-sizing: border-box;
+  display: block;
+  padding: 6px 12px;
+  background-color: $theme-gradient-0;
+  border-radius: 6px;
+  width: fit-content;
+  font-size: .85rem;
+}
+
+.filter {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  text-align: center;
+
+  &__message {}
+
+  &__reset {
+    position: relative;
+    margin: 16px 0 0;
+  }
+}

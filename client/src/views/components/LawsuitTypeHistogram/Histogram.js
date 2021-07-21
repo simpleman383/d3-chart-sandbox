@@ -2,7 +2,8 @@ import * as d3 from "d3";
 import classes from "./styles.module.scss";
 
 export class D3Histogram {
-  constructor(data, size) {
+  constructor(data, size, eventHandlers) {
+    const { onBarClick } = eventHandlers || {};
     const { width = 0, height = 0 } = size || {};
 
     this.width = width;
@@ -20,7 +21,8 @@ export class D3Histogram {
       .padding(0.15)
 
     const y = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.value)]).nice()
+      .domain([0, d3.max(data, d => d.value)])
+      .nice()
       .range([height - margin.bottom, margin.top])
 
 
@@ -37,6 +39,11 @@ export class D3Histogram {
       .call(
         d3.axisLeft(y)
           .ticks()
+          .tickValues(
+            y.ticks()
+              .filter(tick => Number.isInteger(tick))
+          )
+          .tickFormat(value => value.toString())
           .tickSize(-width + margin.right + margin.left)
       )
       .call(g => g.select(".domain").remove())
@@ -65,11 +72,16 @@ export class D3Histogram {
         .attr("fill", d => color(d.key))
         .attr("width", x.bandwidth())
         .attr("height", d => 0)
-        .attr("class", classes.bar);
+        .attr("class", classes.bar)
+        .on("click", (event, target) => {
+          if (typeof(onBarClick) === "function") {
+            onBarClick(event, target);
+          }
+        });
 
     svg.selectAll("rect")
         .transition()
-        .duration(500)
+        .duration(300)
         .attr("y", d => y(d.value))
         .attr("height", d => y(0) - y(d.value))
         .delay((d, idx) => idx * 100);

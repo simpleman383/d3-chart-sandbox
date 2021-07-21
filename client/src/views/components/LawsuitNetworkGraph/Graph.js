@@ -1,6 +1,19 @@
 import * as d3 from "d3";
 import classes from "./styles.module.scss";
+import generateColor from "string-to-color";
 
+var stringToColour = function(str) {
+  var hash = 0;
+  for (var i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  var colour = '#';
+  for (var i = 0; i < 3; i++) {
+    var value = (hash >> (i * 8)) & 0xFF;
+    colour += ('00' + value.toString(16)).substr(-2);
+  }
+  return colour;
+}
 
 class GraphBuilder {
 
@@ -200,7 +213,13 @@ export class D3DirectedGraph {
 
     let nodes = builder.createNodes(container, dataNodes, { 
       radius: 8,
-      onClick: typeof(this.eventHandlers.onNodeClick) === "function" ? this.eventHandlers.onNodeClick : null,
+      onClick: (target, event) => {
+        const targetDataItem = data.nodes[target.index] || null;
+
+        if (typeof(this.eventHandlers.onNodeClick) === "function") {
+          this.eventHandlers.onNodeClick(event, targetDataItem);
+        }
+      },
       onMouseOver: (target, event, node) => {
         links.filter(link => {
           return link.target.index === node.index || link.source.index === node.index;

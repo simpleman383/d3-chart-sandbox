@@ -17,7 +17,32 @@ export const lawsuitHistogramDataSelector = createSelector(
       return typeGroups;
     }
     else {
-      return [];
+      const { type: filterType, value } = filter;
+
+      switch (filterType) {
+        case Filter.ByLawsuitType: {
+          const lawsuitsByType = lawsuits.dimension(item => item.type);
+          const filteredLawsuits = lawsuitsByType.filterExact(value).top(Infinity); 
+          lawsuitsByType.dispose();
+
+          return crossfilter(filteredLawsuits)
+            .dimension(t => t.type)
+            .group()
+            .top(Infinity);
+        }
+        case Filter.ByCompany: {
+          const lawsuitsBySourceTarget = lawsuits.dimension(item => [ item.source, item.target ], true);
+          const filteredLawsuitsBySourceTarget = lawsuitsBySourceTarget.filter(value).top(Infinity);
+          lawsuitsBySourceTarget.dispose();
+
+          return crossfilter(filteredLawsuitsBySourceTarget)
+            .dimension(t => t.type)
+            .group()
+            .top(Infinity);
+        }
+        default:
+          return [];
+      }
     }
   }
 );
@@ -50,9 +75,13 @@ export const lawsuitNetworkChartDataSelector = createSelector(
       switch(filterType) {
         case Filter.ByCompany: {
           const lawsuitsBySourceTarget = lawsuits.dimension(item => [ item.source, item.target ], true);
-          const nodeGroups = lawsuitsBySourceTarget.group().top(Infinity);
           const lawsuitsFilteredLinks = lawsuitsBySourceTarget.filter(value).top(Infinity);
           lawsuitsBySourceTarget.dispose();
+
+          const nodeGroups = crossfilter(lawsuitsFilteredLinks)
+            .dimension(item => [ item.source, item.target ], true)
+            .group()
+            .top(Infinity);
 
           const lawsuitsFiltered = crossfilter(lawsuitsFilteredLinks);
           const lawsuitsFilteredByType = lawsuitsFiltered.dimension(function(d) { return d.type; });
@@ -72,7 +101,7 @@ export const lawsuitNetworkChartDataSelector = createSelector(
 
           const lawsuitsFiltered = crossfilter(lawsuitsFilteredLinks);
           const lawsuitsFilteredBySourceTarget = lawsuitsFiltered.dimension(item => [ item.source, item.target ], true);
-          const nodeGroups = lawsuitsBySourceTarget.group().top(Infinity);
+          const nodeGroups = lawsuitsFilteredBySourceTarget.group().top(Infinity);
           lawsuitsFilteredBySourceTarget.dispose();
 
           const nodes = nodeGroups.map(group => ({ id: group.key }));

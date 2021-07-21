@@ -2,8 +2,8 @@ import React from "react";
 import cls from "classnames";
 import classes from "./styles.module.scss";
 
-import { AbsoluteSizingPanel, LawsuitNetworkChart, LawsuitTypeHistogram } from "views/components";
-
+import { AbsoluteSizingPanel, LawsuitNetworkGraph, LawsuitTypeHistogram, FiltersSettings } from "views/components";
+import { Panel } from "views/elements";
 
 const DashboardView = () => {
 
@@ -14,17 +14,21 @@ const DashboardView = () => {
         <div className={cls(classes.root__column, classes.root__column_main)}>
           <AbsoluteSizingPanel className={cls(classes.root__panel, classes.root__panel_main)}>
             {
-              (size) => <LawsuitNetworkChart width={size.width} height={size.height} />
+              (size) => <LawsuitNetworkGraph width={size.width} height={size.height} />
             }
           </AbsoluteSizingPanel>
         </div>
 
         <div className={cls(classes.root__column, classes.root__column_aside)}>
-          <AbsoluteSizingPanel className={cls(classes.root__panel, classes.root__panel_aside)}>
+          <AbsoluteSizingPanel className={cls(classes.root__panel, classes.root__panel_aside_top)}>
             {
               (size) => <LawsuitTypeHistogram width={size.width} height={size.height} />
             }
           </AbsoluteSizingPanel>
+
+          <Panel className={cls(classes.root__panel, classes.root__panel_aside_bottom)}>
+            <FiltersSettings />
+          </Panel>
         </div>
 
       </div>

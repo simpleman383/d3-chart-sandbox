@@ -6,9 +6,9 @@ import { D3DirectedGraph as D3Graph } from "./Graph";
 const NetworkChartView = ({ className, width, height, data, onNodeClick, ...props }) => {
   const containerRef = React.useRef(null);
 
-  const handleNodeClick = React.useCallback((data, event, node) => {
-    if (typeof(onNodeClick) === "function") {
-      onNodeClick(data);
+  const handleNodeClick = React.useCallback((event, node) => {
+    if (node !== null && typeof(onNodeClick) === "function") {
+      onNodeClick(node);
     }
   }, [ onNodeClick ]);
 
