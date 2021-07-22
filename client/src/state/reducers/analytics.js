@@ -6,7 +6,8 @@ const defaultState = {
   data: null,
   datasetType: DatasetType.Static,
   datasetSize: 100,
-  filter: null
+  filter: null,
+  filters: []
 };
 
 export default (state = defaultState, action) => {
@@ -19,10 +20,31 @@ export default (state = defaultState, action) => {
       };
     }
 
+    case filterActions.FILTER_ADD: {
+      return {
+        ...state,
+        filters: [ 
+          ...state.filters, 
+          {
+            id: action.payload.id,
+            type: action.payload.type,
+            value: action.payload.value     
+          }
+        ]
+      };
+    }
+
+    case filterActions.FILTER_REMOVE: {
+      return {
+        ...state,
+        filters: state.filters.filter(item => item.id !== action.payload.id)
+      };
+    }
+
     case filterActions.FILTER_CHANGE: {
       return {
         ...state,
-        filter: {
+        filters: {
           type: action.payload.type,
           value: action.payload.value
         }

@@ -3,7 +3,7 @@ import ViewComponent from "./View";
 import { lawsuitNetworkChartDataSelector } from "state/selectors/analytics";
 
 import { Filter } from "state/types/analytics";
-import { changeFilter } from "state/actions/analytics/filter";
+import { inputFilter } from "state/actions/analytics/filter";
 
 const mapStateToProps = (state, props) => {
   return {
@@ -14,7 +14,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = dispatch => ({
   onNodeClick: (data) => {
     const companyId = data.id;
-    dispatch(changeFilter(Filter.ByCompany, companyId));
+    dispatch(inputFilter(Filter.ByCompany, companyId));
   }
 })
 

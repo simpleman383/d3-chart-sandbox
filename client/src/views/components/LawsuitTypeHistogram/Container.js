@@ -3,7 +3,7 @@ import ViewComponent from "./View";
 import { lawsuitHistogramDataSelector } from "state/selectors/analytics";
 
 import { Filter } from "state/types/analytics";
-import { changeFilter } from "state/actions/analytics/filter";
+import { inputFilter } from "state/actions/analytics/filter";
 
 const mapStateToProps = (state, props) => {
   return {
@@ -13,7 +13,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => ({
   onBarClick: (event, target) => {
-    dispatch(changeFilter(Filter.ByLawsuitType, target.key));
+    dispatch(inputFilter(Filter.ByLawsuitType, target.key));
   }
 });
 
