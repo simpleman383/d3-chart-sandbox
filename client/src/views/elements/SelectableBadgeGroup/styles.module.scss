@@ -1,0 +1,40 @@
+@import "views/styles/breakpoints.scss";
+@import "views/styles/colors.scss";
+
+
+.root {
+  box-sizing: border-box;
+  display: block;
+
+  &__badge {
+    margin-right: 10px;
+  }
+}
+
+.badge {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+
+  font-style: normal;
+  font-weight: 400;
+  color: $font-default;
+
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid $border-badge;
+
+  transition: all .2s ease;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $background-badge-active;
+    border: 1px solid $border-badge-active;
+    opacity: .9;
+  }
+
+  &_active {
+    background-color: $background-badge-active;
+    border: 1px solid $border-badge-active;
+  }
+}

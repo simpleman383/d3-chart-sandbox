@@ -1,4 +1,5 @@
-import { actions, addFilter, updateFilter } from "state/actions/analytics/filter";
+import { actions, addFilter, updateFilter, resetFilters } from "state/actions/analytics/filter";
+import { actions as dataActions } from "state/actions/analytics/data";
 import { Filter } from "state/types/analytics";
 
 const middleware = ({ dispatch, getState }) => next => (action) => {
@@ -19,7 +20,10 @@ const middleware = ({ dispatch, getState }) => next => (action) => {
         dispatch(updateFilter(existingFilter.id, type, value));
       }
     }
+  }
 
+  if (action.type === dataActions.DATASET_SET) {
+    dispatch(resetFilters());
   }
 
 };

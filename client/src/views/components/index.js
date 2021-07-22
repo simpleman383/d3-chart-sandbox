@@ -3,7 +3,11 @@ import Dashboard from "./Dashboard";
 import withAbsoluteSizing from "./AbsoluteSizing";
 import AbsoluteSizingPanel from "./AbsoluteSizingPanel";
 
-import FiltersSettings from "./Filters";
+import Settings from "./Settings";
+import FilterControls from "./Filters";
+import DataSourceControls from "./DataSource";
+
+
 import LawsuitNetworkGraph from "./LawsuitNetworkGraph";
 import LawsuitTypeHistogram from "./LawsuitTypeHistogram";
 
@@ -15,5 +19,7 @@ export {
   AbsoluteSizingPanel,
   LawsuitNetworkGraph,
   LawsuitTypeHistogram,
-  FiltersSettings
+  Settings,
+  FilterControls,
+  DataSourceControls
 };

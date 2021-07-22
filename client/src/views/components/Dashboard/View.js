@@ -2,7 +2,7 @@ import React from "react";
 import cls from "classnames";
 import classes from "./styles.module.scss";
 
-import { AbsoluteSizingPanel, LawsuitNetworkGraph, LawsuitTypeHistogram, FiltersSettings } from "views/components";
+import { AbsoluteSizingPanel, LawsuitNetworkGraph, LawsuitTypeHistogram, Settings } from "views/components";
 import { Panel } from "views/elements";
 
 const DashboardView = () => {
@@ -27,7 +27,7 @@ const DashboardView = () => {
           </AbsoluteSizingPanel>
 
           <Panel className={cls(classes.root__panel, classes.root__panel_aside_bottom)}>
-            <FiltersSettings />
+            <Settings />
           </Panel>
         </div>
 

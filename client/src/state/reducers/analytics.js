@@ -72,6 +72,13 @@ export default (state = defaultState, action) => {
       };
     }
 
+    case dataActions.DATASET_SIZE_RESET: {
+      return {
+        ...state,
+        datasetSize: defaultState.datasetSize
+      }
+    }
+
     case dataActions.DATASET_SET: {
       return {
         ...state,

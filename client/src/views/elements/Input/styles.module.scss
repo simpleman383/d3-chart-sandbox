@@ -1,0 +1,33 @@
+@import "views/styles/colors.scss";
+@import "views/styles/breakpoints.scss";
+
+.root {
+  box-sizing: border-box;
+  display: block;
+
+  appearance: none;
+  border: 0;
+
+  outline: none;
+  background: none;
+  border-bottom: 1px solid $border-input;
+  padding: 8px 12px;
+
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.27;
+  color: $font-default;
+
+  transition: all .2s ease;
+
+  &:focus {
+    border-bottom: 1px solid $border-input-active;
+  }
+
+  &_error {
+    color: $font-error;
+    border-bottom: 1px solid $border-input-error !important;
+  }
+}

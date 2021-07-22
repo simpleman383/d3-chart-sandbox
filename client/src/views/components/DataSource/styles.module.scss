@@ -1,0 +1,27 @@
+@import "views/styles/breakpoints.scss";
+
+
+.root {
+  box-sizing: border-box;
+
+  &__block {
+    box-sizing: border-box;
+    display: block;
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+.field {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+
+  &__label {
+    margin-right: 12px;
+    font-size: .9rem;
+    line-height: 1.27;
+    cursor: pointer;
+  }
+}

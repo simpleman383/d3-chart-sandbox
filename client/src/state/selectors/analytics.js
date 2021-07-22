@@ -1,6 +1,6 @@
 import crossfilter from "crossfilter2"
 import { createSelector } from "reselect";
-import { Filter } from "state/types/analytics";
+import { Filter, DatasetType } from "state/types/analytics";
 
 const getLawsuits = state => state.analytics.data || [];
 export const getLawsuitFilters = state => state.analytics.filters || [];
@@ -89,3 +89,12 @@ export const lawsuitNetworkChartDataSelector = createSelector(
     };
   }
 );
+
+
+export const getDatasetType = state => state.analytics.datasetType;
+
+export const getDatasetSize = state => state.analytics.datasetSize;
+
+export const getDataSourceOptions = () => {
+  return Object.values(DatasetType).map((value) => ({ key: value, value }));
+};

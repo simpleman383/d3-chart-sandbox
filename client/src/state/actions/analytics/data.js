@@ -6,6 +6,7 @@ export const actions = {
 
   DATASET_SIZE_INPUT: "[analytics/data]:DATASET_TYPE_INPUT",
   DATASET_SIZE_CHANGE: "[analytics/data]:DATASET_SIZE_CHANGE",
+  DATASET_SIZE_RESET: "[analytics/data]:DATASET_SIZE_RESET",
 
   INVALIDATE: "[analytics/data]:INVALIDATE",
   DATASET_SET: "[analytics/data]:DATASET_SET",
@@ -37,3 +38,5 @@ export const setData = (data) => createAction({
   type: actions.DATASET_SET,
   payload: { data }
 });
+
+export const resetDatasetSize = () => createAction({ type: actions.DATASET_SIZE_RESET });

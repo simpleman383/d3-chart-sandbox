@@ -1,5 +1,5 @@
 import { actions as apiActions, fetchRandomDataset, fetchStaticDataset } from "state/actions/analytics/api";
-import { actions, invalidateDataset, setData, changeDatasetSize, changeDatasetType } from "state/actions/analytics/data";
+import { actions, invalidateDataset, setData, changeDatasetSize, resetDatasetSize, changeDatasetType } from "state/actions/analytics/data";
 import { hideLoader, showLoader, showNotification } from "state/actions/core/layout";
 import { actions as lifecycleActions } from "state/actions/core/lifecycle";
 import { DatasetType } from "state/types/analytics";
@@ -94,10 +94,11 @@ const middleware = ({ dispatch, getState }) => next => async (action) => {
   }
 
   if (action.type === actions.DATASET_TYPE_CHANGE) {
+    dispatch(resetDatasetSize());
     dispatch(invalidateDataset());
   }
 
-  if (action.type === actions.RANDOM_DATASET_SIZE_CHANGE) {
+  if (action.type === actions.DATASET_SIZE_CHANGE) {
     dispatch(invalidateDataset());
   }
 

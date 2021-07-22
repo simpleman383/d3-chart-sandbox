@@ -13,6 +13,7 @@ $background-default: $theme-gradient-1;
 $background-header: $theme-gradient-2;
 $background-panel: $theme-gradient-2;
 $background-button: #1f77b4;
+$background-badge-active: #1f77b4;
 $background-button-hovered: #3a8dc9;
 $background-button-disabled: #6e6e6e;
 
@@ -20,4 +21,14 @@ $background-filter-odd: $theme-gradient-3;
 $background-filter-even: $theme-gradient-4;
 
 
+$border-input: #fff;
+$border-input-active: #1f77b4;
+$border-input-error: rgb(223, 34, 34);
+
+
+$border-badge: #fff;
+$border-badge-active: #1f77b4;
+
+
 $font-default: #fff;
+$font-error: rgb(223, 34, 34);
