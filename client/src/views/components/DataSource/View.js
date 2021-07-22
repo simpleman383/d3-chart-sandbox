@@ -31,6 +31,7 @@ const DataSource = ({ currentDataSource, dataSourceOptions, onDataSourceChange, 
   React.useEffect(() => {
     if (size !== randomDatasetSize.toString()) {
       setSize(randomDatasetSize.toString());
+      setError(false);
     }
   }, [ randomDatasetSize ])
 
@@ -44,8 +45,8 @@ const DataSource = ({ currentDataSource, dataSourceOptions, onDataSourceChange, 
           setError(true);
         }
         else {
-          if (1 <= nextSize && nextSize < 1000) {
-            onDatasetSizeChange(nextSize);
+          if (1 <= numberValue && numberValue < 1000) {
+            onDatasetSizeChange(numberValue);
           }
           else {
             setError(true);
@@ -57,7 +58,7 @@ const DataSource = ({ currentDataSource, dataSourceOptions, onDataSourceChange, 
         setError(true);
       }
     }
-  }, 300, [ setError, onDatasetSizeChange ]);
+  }, 400, [ setError, onDatasetSizeChange ]);
 
   React.useEffect(() => {
     handleDatasetSizeChange(size);
