@@ -1,6 +1,5 @@
 import * as d3 from "d3";
 import classes from "./styles.module.scss";
-import generateColor from "string-to-color";
 
 var stringToColour = function(str) {
   var hash = 0;
