@@ -1,18 +1,18 @@
 import { connect } from "react-redux";
 import FiltersView from "./View";
 
-import { resetFilter } from "state/actions/analytics/filter";
+import { removeFilter, resetFilters } from "state/actions/analytics/filter";
+import { getLawsuitFilters } from "state/selectors/analytics";
 
 const mapStateToProps = (state, props) => {
   return {
-    filter: state.analytics.filter
+    filters: getLawsuitFilters(state)
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  onResetFilter: () => {
-    dispatch(resetFilter());
-  }
+  onRemoveFilter: (filterId) => dispatch(removeFilter(filterId)),
+  onResetFilters: () => dispatch(resetFilters())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FiltersView);

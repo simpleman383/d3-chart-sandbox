@@ -5,57 +5,71 @@ import { Heading, Button } from "views/elements";
 import { Filter } from "state/types/analytics";
 
 const localizeFilter = (filter) => {
-  if (filter === null) {
-    return "Фильтр не применен";
-  }
-  else {
-    const { type, value } = filter;
+  const { type, value } = filter;
 
-    let localizedType = type;
-    switch(type) {
-      case Filter.ByLawsuitType: 
-      localizedType = "Тип иска";
-        break;
-      case Filter.ByCompany:
-        localizedType = "Компания";
-        break;
-      default:
-        break;
-    }
+  let localizedType = type;
 
-    return `${localizedType}: ${value}`;
+  switch(type) {
+    case Filter.ByLawsuitType: 
+    localizedType = "Lawsuit type";
+      break;
+    case Filter.ByCompany:
+      localizedType = "Company";
+      break;
+    default:
+      break;
   }
+
+  return `${localizedType}: ${value}`;
 };
 
-const FiltersView = ({ className, filter, onResetFilter }) => {
 
+const FiltersView = ({ className, filters, onRemoveFilter, onResetFilters }) => {
+
+  const isFiltersSet = Boolean(filters) && Array.isArray(filters) && filters.length !== 0;
 
   return (
     <div className={cls(classes.root, className)}>
       <div className={cls(classes.section, classes.root__section, classes.root__section_filters)}>
-        <Heading className={cls(classes.section, classes.section__title)} component="h3">Состояние фильтра</Heading>
+        <Heading className={cls(classes.section, classes.section__title)} component="h3">Filters</Heading>
 
         <div className={cls(classes.section__body)}>
-          {
-            Boolean(filter) && (
-              <div className={cls(classes.filter)}>
-                <span className={cls(classes.message, classes.filter__message)} onClick={onResetFilter}>{localizeFilter(filter)}</span>
-                <Button className={cls(classes.filter__reset)} onClick={onResetFilter}>Сбросить фильтр</Button>
-              </div>
-            )
-          }
-          {
-            !Boolean(filter) && (
-              <div className={cls(classes.filter)}>
-                <span className={cls(classes.message, classes.message_nofilter)}>Фильтр не применен</span>
-              </div>
-            )
-          }
-        </div>
+          <div className={cls(classes.filter)}>
+            {
+              !isFiltersSet && (
+                <div className={cls(classes.filter__emptyBox)}>       
+                  <span className={cls(classes.filter__text)}>No filters</span>
+                </div>      
+              )
+            }
+            {
+              isFiltersSet && (
+                <>
+                  <ul className={cls(classes.filter__state)}>
+                    {
+                      filters.map(filter => {
+                        return (
+                          <li key={filter.id} className={cls(classes.filter__option)}>
+                            <span className={cls(classes.filter__text)}>{localizeFilter(filter)}</span>
+                            <Button className={cls(classes.filter__reset)} onClick={() => onRemoveFilter(filter.id)}>Delete</Button>
+                          </li>
+                        );
+                      })
+                    }
+                  </ul>
 
+                  <div className={cls(classes.filter__actions)}>
+                    <Button className={cls(classes.filter__resetAll)} onClick={onResetFilters}>Reset all</Button>
+                  </div>
+                </>
+              )
+            }
+          </div>
+        </div>
       </div>
 
       <div className={cls(classes.root__section, classes.root__section_settings)}>
+
       </div>
     </div>
   );

@@ -6,7 +6,6 @@ const defaultState = {
   data: null,
   datasetType: DatasetType.Static,
   datasetSize: 100,
-  filter: null,
   filters: []
 };
 
@@ -16,7 +15,7 @@ export default (state = defaultState, action) => {
     case filterActions.FILTER_RESET: {
       return {
         ...state,
-        filter: defaultState.filter
+        filters: defaultState.filters
       };
     }
 
@@ -38,16 +37,6 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         filters: state.filters.filter(item => item.id !== action.payload.id)
-      };
-    }
-
-    case filterActions.FILTER_CHANGE: {
-      return {
-        ...state,
-        filters: {
-          type: action.payload.type,
-          value: action.payload.value
-        }
       };
     }
 

@@ -225,7 +225,7 @@ export class D3DirectedGraph {
           return link.target.index === node.index || link.source.index === node.index;
         })
         .attr("stroke-width", "4px")
-        .attr("stroke", "yellow")
+        .attr("stroke", "rgba(245, 230, 83, 1)")
         .attr("marker-end", "");
 
         if (typeof(this.eventHandlers.onNodeMouseOver) === "function") {

@@ -2,6 +2,10 @@ $theme-gradient-0: #000000;
 $theme-gradient-1: #0c0c0c;
 $theme-gradient-2: #202020;
 
+$theme-gradient-3: #353535;
+$theme-gradient-4: #272727;
+
+
 
 
 $background-default: $theme-gradient-1;
@@ -11,6 +15,9 @@ $background-panel: $theme-gradient-2;
 $background-button: #1f77b4;
 $background-button-hovered: #3a8dc9;
 $background-button-disabled: #6e6e6e;
+
+$background-filter-odd: $theme-gradient-3;
+$background-filter-even: $theme-gradient-4;
 
 
 $font-default: #fff;

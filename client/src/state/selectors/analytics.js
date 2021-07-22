@@ -3,7 +3,7 @@ import { createSelector } from "reselect";
 import { Filter } from "state/types/analytics";
 
 const getLawsuits = state => state.analytics.data || [];
-const getLawsuitFilters = state => state.analytics.filters || [];
+export const getLawsuitFilters = state => state.analytics.filters || [];
 
 
 const getLawsuitsCrossfilter = createSelector(
