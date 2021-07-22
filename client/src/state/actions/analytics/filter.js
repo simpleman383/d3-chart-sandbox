@@ -5,6 +5,7 @@ export const actions = {
   FILTER_RESET: "[analytics/filter]:FILTER_RESET",
   FILTER_INPUT: "[analytics/filter]:FILTER_INPUT",
   FILTER_ADD: "[analytics/filter]:FILTER_ADD",
+  FILTER_UPDATE: "[analytics/filter]:FILTER_UPDATE",
   FILTER_REMOVE: "[analytics/filter]:FILTER_REMOVE"
 };
 
@@ -19,6 +20,11 @@ export const inputFilter = (filterType, filterValue) => createAction({
 export const addFilter = (filterType, filterValue) => createAction({
   type: actions.FILTER_ADD,
   payload: {  id: generateKey(), type: filterType, value: filterValue }
+});
+
+export const updateFilter = (filterId, filterType, filterValue) => createAction({
+  type: actions.FILTER_UPDATE,
+  payload: { id: filterId, type: filterType, value: filterValue }
 });
 
 export const removeFilter = (filterId) => createAction({

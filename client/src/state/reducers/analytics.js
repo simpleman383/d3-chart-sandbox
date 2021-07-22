@@ -33,6 +33,24 @@ export default (state = defaultState, action) => {
       };
     }
 
+    case filterActions.FILTER_UPDATE: {
+      return {
+        ...state,
+        filters: state.filters.map(item => {
+          if (item.id === action.payload.id) {
+            return {
+              ...item,
+              type: action.payload.type,
+              value: action.payload.value
+            };
+          }
+          else {
+            return item;
+          }
+        })
+      };
+    }
+
     case filterActions.FILTER_REMOVE: {
       return {
         ...state,
