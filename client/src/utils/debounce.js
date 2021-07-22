@@ -12,7 +12,6 @@ const debounce = (callback, timeout) => {
 
     timer = setTimeout(() => {
       if (typeof(callback) === "function") {
-        console.log(arguments);
         callback.apply(this, arguments);
       }
     }, timeout);

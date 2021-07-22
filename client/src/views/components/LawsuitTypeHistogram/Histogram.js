@@ -78,13 +78,32 @@ export class D3Histogram {
             onBarClick(event, target);
           }
         });
-
+     
     svg.selectAll("rect")
         .transition()
         .duration(300)
         .attr("y", d => y(d.value))
         .attr("height", d => y(0) - y(d.value))
         .delay((d, idx) => idx * 100);
+
+
+    svg.selectAll(".label")
+      .data(data)
+      .enter()
+      .append("text")
+        .attr("class", "label")
+        .attr("x", (d, i) => x(i) + x.bandwidth() / 2)
+        .attr("text-anchor", "middle")
+        .attr("y", d => y(0))
+        .attr("fill", "white")
+        .attr("font-size", "12px")
+        .text(d => d.value);
+    
+    svg.selectAll(".label")
+      .transition()
+      .duration(600)
+      .attr("y", d => y(d.value) + 16)
+      .delay((d, idx) => idx * 100);
 
     this.svg = svg;
   }

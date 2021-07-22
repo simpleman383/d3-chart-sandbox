@@ -153,17 +153,24 @@ class GraphBuilder {
     const targetX = d.target.x;
     const targetY = d.target.y;
 
-    const r = Math.hypot(targetX - sourceX, targetY - sourceY);
+    if (sourceX === targetX && sourceY === targetY) {
+      const closedArcRadius = 40;
 
-    return `
-      M${sourceX},${sourceY}
-      A${r},${r} 0 0,1 ${targetX},${targetY}
-    `;
+      return `
+        M${sourceX},${sourceY}
+        A${closedArcRadius},${closedArcRadius} 0 1,1 ${targetX + 1},${targetY + 1}
+      `;
+    }
+    else {
+      const r = Math.hypot(targetX - sourceX, targetY - sourceY);
+
+      return `
+        M${sourceX},${sourceY}
+        A${r},${r} 0 0,1 ${targetX},${targetY}
+      `;
+    }
   }
-
 }
-
-
 
 
 export class D3DirectedGraph {
