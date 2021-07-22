@@ -105,7 +105,7 @@ const webpackClientConfiguration = {
     new HtmlWebpackPlugin({
       template: path.resolve(paths.staticDir, "index.html"),
       filename: path.resolve(paths.distDir, "index.html"),
-      title: "d3.js app"
+      scriptLoading: "blocking",
     }),
     isProduction ? new MiniCssExtractPlugin({
       filename: "css/[name].[contenthash:8].css",

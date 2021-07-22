@@ -83,7 +83,7 @@ export class D3Histogram {
         .transition()
         .duration(300)
         .attr("y", d => y(d.value))
-        .attr("height", d => y(0) - y(d.value))
+        .attr("height", d => y(0) - y(d.value)) 
         .delay((d, idx) => idx * 100);
 
 
