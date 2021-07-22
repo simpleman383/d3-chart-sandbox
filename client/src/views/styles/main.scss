@@ -6,20 +6,19 @@
 html, body {
   margin: 0;
   background: $background-default;
-  width: 100%;
-  height: 100%;
+
 
   font-family: Roboto, Arial, sans-serif;
   font-weight: normal;
   font-size: 16px;
 
   color: $font-default;
-
-  
 }
 
-
-#root {
+html, body, #root {
   width: 100%;
-  height: 100%;
+
+  @include laptop-up {
+    height: 100%;
+  }
 }

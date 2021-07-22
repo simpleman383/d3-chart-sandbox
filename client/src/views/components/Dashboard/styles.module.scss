@@ -25,31 +25,35 @@
     box-sizing: border-box;
     display: block;
 
-
     @include laptop-up {
-      height: inherit;
+      height: inherit !important;
     }
 
     &_main {
-      flex: 1 0;
+      height: 480px;
+
+      @include laptop-up {
+        flex: 1 0;
+      }
     }
 
     &_aside {
-      flex: 0 0 270px;
-      margin: 24px 0 0 0;
+      margin: 16px 0 0;
 
       @include tablet-portrait-up {
         margin: 32px 0 0 0;
-        flex: 0 0 320px;
       }
 
       @include laptop-up {
+        max-height: unset;
         margin: 0 0 0 32px;
         flex: 0 0 360px;
+        max-width: 360px;
       }
 
       @include desktop-up {
         flex: 0 0 400px;
+        max-width: 400px;
       }
     }
   }
@@ -65,7 +69,11 @@
 
     &_aside_top {
       width: 100%;
-      height: 100%;
+      height: 240px;
+
+      @include tablet-portrait-up {
+        height: 320px;
+      }
 
       @include laptop-up {
         height: 50%;
@@ -74,8 +82,8 @@
 
     &_aside_bottom {
       width: 100%;
-      margin-top: 24px;
       padding: 24px 20px;
+      margin: 16px 0 0;
     }
   }
 

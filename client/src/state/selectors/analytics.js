@@ -33,8 +33,8 @@ const getLawsuitsSideFilteringIndex = createSelector(
 
 
 const applyFiltersSelector = createSelector(
-  [ getLawsuitsSideFilteringIndex, getLawsuitsTypeFilteringIndex, getLawsuitFilters, getLawsuitsTypeReadingIndex ],
-  (lawsuitsSidesIndex, lawsuitsTypeIndex, filters, typeIdx) => {
+  [ getLawsuitsSideFilteringIndex, getLawsuitsTypeFilteringIndex, getLawsuitFilters ],
+  (lawsuitsSidesIndex, lawsuitsTypeIndex, filters) => {
     const appliedFilterTypes = filters.map(filter => filter.type);
 
     for(const filterType of Object.values(Filter)) {
@@ -65,7 +65,7 @@ const applyFiltersSelector = createSelector(
       }
     }
 
-    return {};
+    return filters;
   }
 );
 
